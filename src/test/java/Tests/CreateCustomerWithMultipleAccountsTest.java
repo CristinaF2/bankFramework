@@ -1,129 +1,36 @@
 package Tests;
 
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.Select;
-import org.testng.Assert;
+import ObjectData.CustomerObject;
+import Pages.BankManagerPage;
+import Pages.HomePage;
+import PropertyUtility.PropertyUtility;
+import ShareData.Hooks;
 import org.testng.annotations.Test;
 
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.TreeMap;
 
-public class CreateCustomerWithMultipleAccountsTest {
-
-    public WebDriver webDriver;
+public class CreateCustomerWithMultipleAccountsTest extends Hooks {
 
     @Test
     public void testMethod() {
-        webDriver = new ChromeDriver();
-        webDriver.get("https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login");
-        webDriver.manage().window().maximize();
-        webDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 
 
-        WebElement bankMangerLoginElement = webDriver.findElement(By.xpath("//button[@ng-click='manager()']"));
-        bankMangerLoginElement.click();
+        PropertyUtility propertyUtility = new PropertyUtility("CreateCustomerTest");
+        CustomerObject createCustomerObject = new CustomerObject(propertyUtility.getData());
 
-        WebElement addCustomerElement = webDriver.findElement(By.xpath("//button[@ng-click='addCust()']"));
-        addCustomerElement.click();
-
-        WebElement firstNameElement = webDriver.findElement(By.xpath("//input[@ng-model='fName']"));
-        String firstNameValue = "Filipan"+System.currentTimeMillis();
-        firstNameElement.sendKeys(firstNameValue);
-
-        WebElement lastNameElement = webDriver.findElement(By.xpath("//input[@ng-model='lName']"));
-        String lastNameValue = "Cristina";
-        lastNameElement.sendKeys(lastNameValue);
-
-        WebElement postCodeElement = webDriver.findElement(By.xpath("//input[@ng-model='postCd']"));
-        String postCodeValue = "459123";
-        postCodeElement.sendKeys(postCodeValue);
-
-        WebElement submitElement = webDriver.findElement(By.xpath("//button[@type='submit']"));
-        submitElement.click();
-
-        Alert customerAlert = webDriver.switchTo().alert();
-        String alertMessage = customerAlert.getText();
-        //System.out.println(alertMessage);
-
-        //facem un algoritm care sa extraga id ul de pe alerta
-        String[] messageArray = alertMessage.split(":");
-        //System.out.println(messageArray[1]);
-
-        //String idCustomer=alertMessage.split(":")[1];
-        customerAlert.accept();
-
-        WebElement openAccountElement = webDriver.findElement(By.xpath("//button[@ng-click='openAccount()']"));
-        openAccountElement.click();
+        HomePage homePage = new HomePage(webDriver);
+        homePage.loginBankManager();
 
 
-        WebElement customerDropdownElement = webDriver.findElement(By.id("userSelect"));
-        Select customerSelect = new Select(customerDropdownElement);
+        BankManagerPage bankManagerPage = new BankManagerPage(webDriver);
+        bankManagerPage.createCustomer(createCustomerObject);
 
-        WebElement currencyDropdownElement = webDriver.findElement(By.id("currency"));
-        Select currencySelect = new Select(currencyDropdownElement);
+        bankManagerPage.addAccountsToCustomer(createCustomerObject);
 
-        WebElement submitAccountElement = webDriver.findElement(By.xpath("//button[@type='submit']"));
+        bankManagerPage.validdateTableContent(createCustomerObject);
 
+        bankManagerPage.deleteCustomer(createCustomerObject);
 
-        List<String> currency = new ArrayList<>();
-        currency.add("Dollar");
-        currency.add("Pound");
-        currency.add("Rupee");
-
-        //List<String> id = new ArrayList<>();
-        String finalId="";
-
-        for (int index = 0; index < currency.size(); index++) {
-            customerSelect.selectByVisibleText(firstNameValue + " " + lastNameValue);
-            currencySelect.selectByVisibleText(currency.get(index));
-            submitAccountElement.click();
-
-            Alert accountAlert = webDriver.switchTo().alert();
-            String alertAccountMessage = customerAlert.getText();
-
-            String idAccount = alertAccountMessage.split(":")[1];
-
-            if (index==currency.size()-1){
-                finalId=finalId+idAccount;
-            }else {
-                finalId = finalId + idAccount + " ";
-            }
-
-            accountAlert.accept();
-
-
-        }
-
-
-        WebElement customerButtonElement = webDriver.findElement(By.xpath("//button[@ng-click='showCust()']"));
-        customerButtonElement.click();
-
-        //validam contentul raportului
-        WebElement searchTableElement = webDriver.findElement(By.xpath("//input[@ng-model='searchCustomer']"));
-        searchTableElement.sendKeys(firstNameValue);
-
-
-        List<WebElement> tableColumns = webDriver.findElements(By.xpath("//td[text()='" + firstNameValue + "']/../td"));
-        Assert.assertEquals(firstNameValue, tableColumns.get(0).getText());
-        Assert.assertEquals(lastNameValue, tableColumns.get(1).getText());
-        Assert.assertEquals(postCodeValue, tableColumns.get(2).getText());
-        Assert.assertEquals(finalId, tableColumns.get(3).getText());
-
-
-        WebElement deleteElement = tableColumns.get(4).findElement(By.tagName("button"));
-        deleteElement.click();
-
-        List<WebElement> tableColumnsAfterDelete = webDriver.findElements(By.xpath("//td[text()='" + firstNameValue + "']/../td"));
-        Assert.assertEquals(0, tableColumnsAfterDelete.size());
-        //tbody/tr[1]/td
-
-        webDriver.quit();
 
     }
-
 }

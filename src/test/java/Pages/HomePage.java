@@ -1,5 +1,8 @@
 package Pages;
 
+import HelperMethods.AlertMethods;
+import HelperMethods.ElementMethods;
+import logger.LoggerUtility;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -8,22 +11,37 @@ import org.openqa.selenium.support.PageFactory;
 public class HomePage {
 
     public WebDriver webDriver;
+    protected AlertMethods alertMethods;
+
+    protected ElementMethods elementMethods;
 
     public HomePage(WebDriver webDriver) {
         this.webDriver = webDriver;
-        PageFactory.initElements(webDriver,this);
+        this.alertMethods = new AlertMethods(webDriver);
+        this.elementMethods=new ElementMethods(webDriver);
+        PageFactory.initElements(webDriver, this);
+
     }
 
     @FindBy(xpath = "//button[@ng-click='manager()']")
     public WebElement bankMangerLoginElement;
 
-    public void loginBankManager(){
+
+    @FindBy(xpath = "//button[@ng-click='customer()']")
+    public WebElement customerLoginElement;
+
+
+    public void loginBankManager() {
         bankMangerLoginElement.click();
+        LoggerUtility.infoLog("The bank manager has logged in");
     }
 
 
+    public void loginCustomer() {
 
-
+        customerLoginElement.click();
+        LoggerUtility.infoLog("The user clicked on Customer login button");
+    }
 
 
 }
