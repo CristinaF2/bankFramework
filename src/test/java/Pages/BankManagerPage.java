@@ -58,14 +58,6 @@ public class BankManagerPage extends HomePage {
     @FindBy(xpath = "//select[@id='currency']/option")
     public WebElement currencyListElement;
 
-    @FindBy(xpath = "//button[@ng-click='home()']")
-    public WebElement homeButtonElement;
-
-    public void goOnHomePage() {
-        homeButtonElement.click();
-        LoggerUtility.infoLog("CLick on home button");
-
-    }
 
     public void createCustomer(CustomerObject createCustomerObject) {
 
@@ -104,12 +96,7 @@ public class BankManagerPage extends HomePage {
 
     }
 
-    public void selectValue(WebElement webElement, String value) {
-        Select select = new Select(webElement);
-        //selectByValue- cand avem cifre/numere
-        //selectByVisibleText -cand avem text, caractere
-        select.selectByVisibleText(value);
-    }
+
 
 
     public void openAccountCustomer(CustomerObject createCustomerObject) {
@@ -117,10 +104,10 @@ public class BankManagerPage extends HomePage {
         openAccountElement.click();
         LoggerUtility.infoLog("The bank manager clicks on Open account button");
 
-        selectValue(customerDropdownElement, createCustomerObject.getFirstName() + " " + createCustomerObject.getLastName());
+        elementMethods.selectValue(customerDropdownElement, createCustomerObject.getFirstName() + " " + createCustomerObject.getLastName());
         LoggerUtility.infoLog("The bank manager selects customer with name "+createCustomerObject.getFirstName() + " " + createCustomerObject.getLastName());
 
-        selectValue(currencyDropdownElement, createCustomerObject.getAccounts().get(0).getCurrency());
+        elementMethods.selectValue(currencyDropdownElement, createCustomerObject.getAccounts().get(0).getCurrency());
         LoggerUtility.infoLog("The bank manager selects "+createCustomerObject.getAccounts().get(0).getCurrency()+" as currency");
 
         submitAccountElement.click();
@@ -147,10 +134,10 @@ public class BankManagerPage extends HomePage {
 
         for (int index = 0; index < createCustomerObject.getAccounts().size(); index++) {
 
-            selectValue(customerDropdownElement, createCustomerObject.getFirstName() + " " + createCustomerObject.getLastName());
+            elementMethods.selectValue(customerDropdownElement, createCustomerObject.getFirstName() + " " + createCustomerObject.getLastName());
             LoggerUtility.infoLog("The bank account manager selects customer: "+createCustomerObject.getFirstName() + " " + createCustomerObject.getLastName());
 
-            selectValue(currencyDropdownElement, createCustomerObject.getAccounts().get(index).getCurrency());
+            elementMethods.selectValue(currencyDropdownElement, createCustomerObject.getAccounts().get(index).getCurrency());
             LoggerUtility.infoLog("The bank account manager selects currency "+createCustomerObject.getAccounts().get(index).getCurrency());
 
             submitAccountElement.click();

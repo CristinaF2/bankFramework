@@ -10,7 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 
 public class HomePage {
 
-    public WebDriver webDriver;
+    protected WebDriver webDriver;
     protected AlertMethods alertMethods;
 
     protected ElementMethods elementMethods;
@@ -30,7 +30,14 @@ public class HomePage {
     @FindBy(xpath = "//button[@ng-click='customer()']")
     public WebElement customerLoginElement;
 
+    @FindBy(xpath = "//button[@ng-click='home()']")
+    public WebElement homeButtonElement;
 
+    public void goOnHomePage() {
+        homeButtonElement.click();
+        LoggerUtility.infoLog("CLick on home button");
+
+    }
     public void loginBankManager() {
         bankMangerLoginElement.click();
         LoggerUtility.infoLog("The bank manager has logged in");

@@ -19,6 +19,7 @@ public class CustomerObject extends CommonObject{
     public CustomerObject(HashMap<String,String> testData) {
         populateData(testData);
         prepareAccounts(testData);
+        prepareAccountTransactions(testData);
 
     }
 
@@ -45,9 +46,35 @@ public class CustomerObject extends CommonObject{
         accounts=new ArrayList<>();
         for (int index=0; index< currencies.size();index++){
             accounts.add(new AccountObject(currencies.get(index),""));
-
         }
+    }
+
+    private void prepareAccountTransactions(HashMap<String,String> testData){
+        //verificam daca fisierul de proprietati contine o cheie pentru tranzactii
+        if (testData.containsKey("transactionsDollar")){
+           populateTransactions("transactionsDollar",testData);
+        }
+        if (testData.containsKey("transactionsPound")){
+            populateTransactions("transactionsPound",testData);
+        }
+        if (testData.containsKey("transactionsRupee")){
+           populateTransactions("transactionsRupee",testData);
+        }
+    }
+
+    private void populateTransactions(String key,HashMap<String,String> testData ){
+        String currency=key.split("transactions")[1];
+        int position=0;
+        for (int index=0; index< accounts.size(); index++){
+            if(accounts.get(index).getCurrency().equals(currency)){
+                position=index;
+                break;
+            }
+        }
+        String transactions=testData.get(key);
+        accounts.get(position).prepareAccountTransactions(transactions);
 
     }
+
 
 }

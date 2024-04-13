@@ -16,7 +16,7 @@ public class PerformActionsCustomerWithAccountsTest extends Hooks {
 
     @Test
     public void testMethod()  {
-        PropertyUtility propertyUtility = new PropertyUtility("CreateCustomerTest");
+        PropertyUtility propertyUtility = new PropertyUtility("PerformActionsCustomerAccounts");
         CustomerObject createCustomerObject = new CustomerObject(propertyUtility.getData());
 
 
@@ -27,6 +27,8 @@ public class PerformActionsCustomerWithAccountsTest extends Hooks {
         bankManagerPage.createCustomer(createCustomerObject);
         bankManagerPage.addAccountsToCustomer(createCustomerObject);
 
+        bankManagerPage.validdateTableContent(createCustomerObject);
+
         bankManagerPage.goOnHomePage();
         homePage.loginCustomer();
 
@@ -35,10 +37,17 @@ public class PerformActionsCustomerWithAccountsTest extends Hooks {
 
         CustomerAccountPage customerAccountPage=new CustomerAccountPage(webDriver);;
         customerAccountPage.checkAccountsDetails(createCustomerObject);
-        bankManagerPage.goOnHomePage();
+
+        customerAccountPage.performTransactionsAccounts(createCustomerObject);
+
+        customerAccountPage.goOnHomePage();
         homePage.loginBankManager();
         bankManagerPage.validdateTableContent(createCustomerObject);
         bankManagerPage.deleteCustomer(createCustomerObject);
+
+        // tema: browser +github de facut pt data viitoare
+        //de adaugat loguri pt ultima parte
+
 
     }
 }
