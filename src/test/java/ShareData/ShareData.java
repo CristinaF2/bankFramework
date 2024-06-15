@@ -17,7 +17,6 @@ public class ShareData {
 
 
     public void prepareBrowser(){
-       // ConfigurationNode configurationNode= ConfigFile.createConfigNode(ConfigurationNode.class);
 
         webDriver= new BrowserFactory().getBrowserFactory();
 //        webDriver = new ChromeDriver();
