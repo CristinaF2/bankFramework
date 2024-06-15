@@ -1,5 +1,8 @@
 package ShareData;
 
+import ShareData.browser.BrowserFactory;
+import configFile.ConfigFile;
+import configFile.configNode.ConfigurationNode;
 import logger.LoggerUtility;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -14,11 +17,16 @@ public class ShareData {
 
 
     public void prepareBrowser(){
-        webDriver = new ChromeDriver();
-        webDriver.get("https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login");
-        webDriver.manage().window().maximize();
-        webDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+       // ConfigurationNode configurationNode= ConfigFile.createConfigNode(ConfigurationNode.class);
+
+        webDriver= new BrowserFactory().getBrowserFactory();
+//        webDriver = new ChromeDriver();
+//        webDriver.get(configurationNode.driverConfigNode.url);
+//        webDriver.manage().window().maximize();
+//        webDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         LoggerUtility.infoLog("The browser was opened with success");
+
+
     }
 
 
